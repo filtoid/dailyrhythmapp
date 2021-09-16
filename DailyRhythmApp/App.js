@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StatusBar, FlatList } from "react-native";
+import { View, FlatList, StyleSheet } from "react-native";
 import styled from "styled-components/native";
 import AddInput from "./Components/AddInput";
 import TodoList from "./Components/TodoList";
@@ -30,12 +30,7 @@ export default function App() {
 
  return (
       <ComponentContainer>
-        <View>
-          <StatusBar barStyle="light-content" 
-             backgroundColor="midnightblue" />
-        </View>
-
-        <View>
+        <View style={StyleSheet.scrollView}>
           <FlatList
             data={data}
             ListHeaderComponent={() => <Header />}
@@ -55,9 +50,9 @@ export default function App() {
 }
 
 const ComponentContainer = styled.View`
-  background-color: midnightblue;
+  background-color: #1f1f1f;
   height: 100%;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
 `;
+

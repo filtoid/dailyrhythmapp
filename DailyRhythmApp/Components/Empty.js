@@ -5,9 +5,6 @@ import SplashImage from "../assets/adaptive-icon.png";
 export default function Empty() {
   return (
     <ComponentContainer>
-      <EmptyImage
-        source={SplashImage}
-      />
       <EmptyText>Create a task</EmptyText>
     </ComponentContainer>
   );
@@ -16,7 +13,6 @@ export default function Empty() {
 const ComponentContainer = styled.View`
   align-items: center;
   justify-content: center;
-  min-height: 450px;
 `;
 
 const EmptyImage = styled.Image`
@@ -25,8 +21,9 @@ const EmptyImage = styled.Image`
 `;
 
 const EmptyText = styled.Text`
-  color: white;
+  color: #d4d0d0;
   font-family: arial;
-  margin-top: 30px;
+  margin-top: 10px;
+  margin-bottom: 30px;
   font-size: 30px;
 `;

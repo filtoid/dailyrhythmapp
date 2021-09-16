@@ -36,9 +36,11 @@ export default function AddInput({ submitHandler }) {
 
 const TodoContainer = styled.View`
   flex-direction: column;
-  background-color: #999999;
+  background-color: #595959;
   padding: 25px;
-  border-radius: 10px;
+  border-radius: 5px;
+  filter: drop-shadow(4px 6px 4px rgba(200,200,220, 1));
+  margin-bottom: 10px;
 `;
 
 const InputContainer = styled.View`
@@ -54,6 +56,7 @@ const Input = styled.TextInput`
   margin-bottom: 20px;
   border-radius: 5px;
   display:block;
+  filter: drop-shadow(3px 3px 1px rgba(40,40,40, 1));
 `;
 
 const TodoAddButton = styled.TouchableOpacity`
@@ -65,4 +68,5 @@ const TodoAddButton = styled.TouchableOpacity`
   align-items: center;
   background-color: #d8d8d8;
   border-radius: 50px;
+  filter: drop-shadow(3px 3px 1px rgba(40,40,40, 1));
 `;
