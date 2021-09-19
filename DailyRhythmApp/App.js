@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, FlatList, StyleSheet } from "react-native";
 import styled from "styled-components/native";
 import AddInput from "./Components/AddInput";
@@ -6,29 +6,46 @@ import TodoList from "./Components/TodoList";
 import Empty from "./Components/Empty";
 import Header from "./Components/Header";
 
+import {GetStoredData, SaveStoredData} from "./StorageService";
+
 export default function App() {
- const [data, setData] = useState([]);
+
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    GetStoredData().then((stored_data) => {
+      
+      if(stored_data != null){
+        setData(stored_data);
+      }
+    });
+  }, [])
+  
 
   const submitHandler = (value, description) => {
     setData((prevTodo) => {
-      return [
+      let ret = [
         {
-          value: value,
+          name: value,
           description: description,
           key: Math.random().toString(),
         },
         ...prevTodo,
       ];
+      SaveStoredData(ret);
+      return ret;
     });
   };
 
   const deleteItem = (key) => {
     setData((prevTodo) => {
-      return prevTodo.filter((todo) => todo.key != key);
+      let ret = prevTodo.filter((todo) => todo.key != key);
+      SaveStoredData(ret);
+      return ret;
     });
   };
 
- return (
+  return (
       <ComponentContainer>
         <View style={StyleSheet.scrollView}>
           <FlatList
