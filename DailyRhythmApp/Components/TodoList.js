@@ -9,7 +9,7 @@ export default function TodoList({ item, deleteItem }) {
     <ComponentContainer>
       <ListContainer>
         <View>
-          <TextItem>{item.value}</TextItem>
+          <TextItem>{item.name}</TextItem>
         </View>
         <IconContainer onPress={() => deleteItem(item.key)}>
           <MaterialIcons name="delete" size={24} color="black" />
