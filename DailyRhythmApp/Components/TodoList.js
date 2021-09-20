@@ -1,22 +1,65 @@
-import React from "react";
+import React, { useState } from "react";
 import { View } from "react-native";
-import { Entypo } from "@expo/vector-icons";
-import { MaterialIcons } from "@expo/vector-icons";
+import { AntDesign, Entypo, MaterialIcons } from "@expo/vector-icons";
+
 import styled from "styled-components/native";
 
 export default function TodoList({ item, deleteItem }) {
-  return (
-    <ComponentContainer>
-      <ListContainer>
-        <View>
-          <TextItem>{item.name}</TextItem>
-        </View>
-        <IconContainer onPress={() => deleteItem(item.key)}>
-          <MaterialIcons name="delete" size={24} color="black" />
-        </IconContainer>
-      </ListContainer>
-    </ComponentContainer>
-  );
+    const [seconds, setSeconds] = useState(0);
+    const [isRunning, setIsRunning] = useState(false);
+    // const [backgroundColor, setBackgroundColor] = useState();
+
+    const tick = () => {
+        if(isRunning){
+            setSeconds(seconds + 1);
+        }
+    }
+
+    React.useEffect(() => {
+        const timerId = setInterval(() => tick(), 1000);
+        return () => clearInterval(timerId);
+    });
+
+    const getFormattedTime = () => {
+        let mins = Math.floor(seconds/60);
+        let secs = seconds % 60;
+        if(seconds < 60){
+            return secs + "s";
+        }else{
+            return mins + "m " + secs + "s";
+        }
+    }
+
+    const getPlayButton = () => {
+        if(!isRunning){
+            return <AntDesign name="caretright" size={24} color="black" />;
+        }else{
+            return <Entypo name="controller-stop" size={24} color="black" />
+        }
+    }
+    const backgroundColor = () => {
+        if(!isRunning){
+            return {backgroundColor: 'whitesmoke'}
+        }else{
+            return {backgroundColor: 'green'}
+        }
+    }
+    return (
+        <ComponentContainer>
+        <ListContainer style={backgroundColor()}>
+            <View>
+            <TextItem>{item.name}</TextItem>
+            <TextItem>{getFormattedTime()}</TextItem>
+            </View>
+            <IconContainer onPress={() => deleteItem(item.key)}>
+            <MaterialIcons name="delete" size={24} color="black" />
+            </IconContainer>
+            <IconContainer onPress={() => setIsRunning(!isRunning)}>
+            {getPlayButton()}
+            </IconContainer>
+        </ListContainer>
+        </ComponentContainer>
+    );
 }
 
 
@@ -28,6 +71,7 @@ const ListContainer = styled.TouchableOpacity`
   border-radius: 10px;
   flex-direction: row;
   justify-content: space-between;
+  padding: 20px;
 `;
 
 const ComponentContainer = styled.View`
@@ -39,7 +83,7 @@ const ComponentContainer = styled.View`
 
 const TextItem = styled.Text`
   color: black;
-  width: 260px;
+  width: 200px;
   height: auto;
   font-size: 20px;
   margin-top: 10px;
@@ -60,7 +104,7 @@ const TextDate = styled.Text`
 const IconContainer = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
-  margin-right: 10px;
+  margin-right: 5px;
   margin-top: 0px;
   height: 40px;
   border-radius: 10px;
