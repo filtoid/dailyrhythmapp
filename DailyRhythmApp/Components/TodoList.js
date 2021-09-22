@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View } from "react-native";
 import { AntDesign, Entypo, MaterialIcons } from "@expo/vector-icons";
-
+import { GetCurrentDateId } from "../StorageService";
 import styled from "styled-components/native";
 
 const SAVE_TIMEOUT = 10;
@@ -12,16 +12,8 @@ export default function TodoList({ item, deleteItem, saveAll }) {
     const [lastSaved, setLastSaved] = useState(0);
 
     // const [backgroundColor, setBackgroundColor] = useState();
-    let d = new Date(); 
-    let m = "" + d.getUTCMonth();
-    if(m.length < 2){
-        m = "0" + m;
-    }
-    let dy = "" + d.getUTCDay();
-    if(dy.length < 2){
-        dy = "0" + dy;
-    }
-    const [curDate, ] = useState("" + d.getFullYear() + m + dy);
+    let d = GetCurrentDateId();
+    const [curDate, ] = useState(d);
 
     const tick = () => {
         if(isRunning){
