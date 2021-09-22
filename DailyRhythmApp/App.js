@@ -29,6 +29,7 @@ export default function App() {
           name: value,
           description: description,
           key: Math.random().toString(),
+          time: 0
         },
         ...prevTodo,
       ];
@@ -45,6 +46,22 @@ export default function App() {
     });
   };
 
+  const saveList = (key, newTime) => {
+    let bFound = false
+    for(let i=0;!bFound && i<data.length;i++){
+      if(data[i].key === key){
+        data[i].time = newTime;
+        bFound = true;
+      }
+    }
+    if(!bFound){
+      console.log("Failed to find key " + key );
+      return;
+    }
+    setData(data);
+    SaveStoredData(data);
+  }
+
   return (
       <ComponentContainer>
         <View style={StyleSheet.scrollView}>
@@ -54,7 +71,7 @@ export default function App() {
             ListEmptyComponent={() => <Empty />}
             keyExtractor={(item) => item.key}
             renderItem={({ item }) => (
-              <TodoList item={item} deleteItem={deleteItem}/>
+              <TodoList item={item} deleteItem={deleteItem} saveAll={saveList}/>
             )}
           />
           <View>
