@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { View, FlatList, StyleSheet } from "react-native";
-import styled from "styled-components/native";
-import AddInput from "./Components/AddInput";
-import TodoList from "./Components/TodoList";
-import Empty from "./Components/Empty";
-import Header from "./Components/Header";
+import TodoController from "./Components/TodoController";
+
 import {GetStoredData, SaveStoredData, GetCurrentDateId, StoreArchiveData} from "./StorageService";
+import { NativeRouter, Route, Link } from "react-router-native";
 
 export default function App() {
 
@@ -29,8 +26,6 @@ export default function App() {
         setData(stored_data);
       }
     });
-
-
   }, [])
   
 
@@ -76,30 +71,12 @@ export default function App() {
   }
 
   return (
-      <ComponentContainer>
-        <View style={StyleSheet.scrollView}>
-          <FlatList
-            data={data}
-            ListHeaderComponent={() => <Header />}
-            ListEmptyComponent={() => <Empty />}
-            keyExtractor={(item) => item.key}
-            renderItem={({ item }) => (
-              <TodoList item={item} deleteItem={deleteItem} saveAll={saveList}/>
-            )}
-          />
-          <View>
-            <AddInput submitHandler={submitHandler} />
-          </View>
-        </View>
-        
-      </ComponentContainer>
+    <NativeRouter>
+      <Route exact path="/">
+        <TodoController data={data} saveList={saveList} deleteItem={deleteItem} submitHandler={submitHandler}/>
+      </Route>
+    </NativeRouter>
     );
 }
 
-const ComponentContainer = styled.View`
-  background-color: #1f1f1f;
-  height: 100%;
-  flex-direction: column;
-  align-items: center;
-`;
 
