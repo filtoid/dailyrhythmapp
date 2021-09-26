@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { View } from "react-native";
-import { AntDesign, Entypo, MaterialIcons } from "@expo/vector-icons";
+import { AntDesign, Entypo, Ionicons } from "@expo/vector-icons";
 import { GetCurrentDateId } from "../StorageService";
+
 import styled from "styled-components/native";
 
 const SAVE_TIMEOUT = 10;
 
-export default function TodoList({ item, deleteItem, saveAll }) {
+export default function TodoList({ item, index, deleteItem, saveAll, navigation }) {
     const [seconds, setSeconds] = useState(item.time);
     const [isRunning, setIsRunning] = useState(false);
     const [lastSaved, setLastSaved] = useState(0);
 
-    // const [backgroundColor, setBackgroundColor] = useState();
     let d = GetCurrentDateId();
     const [curDate, ] = useState(d);
 
@@ -68,8 +68,10 @@ export default function TodoList({ item, deleteItem, saveAll }) {
             <TextItem>{item.name}</TextItem>
             <TextItem>{getFormattedTime()}</TextItem>
             </View>
-            <IconContainer onPress={() => deleteItem(item.key)}>
-            <MaterialIcons name="delete" size={24} color="black" />
+            <IconContainer onPress={() => {
+                navigation.navigation.navigate('Todo', { index: index, item:item })
+            }}>
+            <Ionicons name="ios-open-sharp" size={24} color="black" />
             </IconContainer>
             <IconContainer onPress={() => toggleRunning()}>
             {getPlayButton()}
@@ -80,7 +82,7 @@ export default function TodoList({ item, deleteItem, saveAll }) {
 }
 
 
-const ListContainer = styled.TouchableOpacity`
+const ListContainer = styled.View`
   background-color: whitesmoke;
   height: auto;
   width: 350px;
