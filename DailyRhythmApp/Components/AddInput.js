@@ -2,7 +2,7 @@ import React, { useState, useReducer } from "react";
 import {View, TextInput, Text, TouchableOpacity, Button} from 'react-native'
 import styled from "styled-components/native";
 
-export default function AddInput({ submitHandler }) {
+export default function AddInput({ submitHandler, returnCall }) {
     const [taskName, setTaskName] = useState("");
     const [taskDescription, setTaskDescription] = useState("");
 
@@ -26,6 +26,7 @@ export default function AddInput({ submitHandler }) {
             submitHandler(taskName, taskDescription);
             setTaskName("");
             setTaskDescription("");
+            returnCall();
         }}
       >
         <Text>Submit</Text>

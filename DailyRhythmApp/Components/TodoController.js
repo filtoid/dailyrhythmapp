@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, FlatList, StyleSheet } from "react-native";
 
 import {GetStoredData, SaveStoredData, GetCurrentDateId, StoreArchiveData} from "../StorageService";
-
-import AddInput from "./AddInput";
+import styled from "styled-components/native";
 import TodoList from "./TodoList";
 import Empty from "./Empty";
 
@@ -31,23 +30,6 @@ export default function TodoController(navigation) {
       }
     });
   }, [])
-  
-  const submitHandler = (value, description) => {
-    setData((prevTodo) => {
-      let ret = [
-        {
-          name: value,
-          description: description,
-          key: Math.random().toString(),
-          time: 0,
-          curDate: GetCurrentDateId()
-        },
-        ...prevTodo,
-      ];
-      SaveStoredData(ret);
-      return ret;
-    });
-  };
 
   const deleteItem = (key) => {
     setData((prevTodo) => {
@@ -73,6 +55,23 @@ export default function TodoController(navigation) {
     SaveStoredData(data);
   }
 
+  const submitHandler = (value, description) => {
+    setData((prevTodo) => {
+      let ret = [
+        {
+          name: value,
+          description: description,
+          key: Math.random().toString(),
+          time: 0,
+          curDate: GetCurrentDateId()
+        },
+        ...prevTodo,
+      ];
+      SaveStoredData(ret);
+      return ret;
+    });
+  };
+
   return (
     <ComponentContainer>
       <View style={StyleSheet.scrollView}>
@@ -85,9 +84,25 @@ export default function TodoController(navigation) {
           )}
         />
         <View>
-          <AddInput submitHandler={submitHandler} />
+          <NewAddButton onPress={() => {
+                navigation.navigation.navigate('New Todo', {submitHandler: submitHandler})
+            }}>New</NewAddButton>
         </View>
       </View>
     </ComponentContainer>
   )
 }
+
+const NewAddButton = styled.TouchableOpacity`
+  font-family:arial;
+  width: 350px;
+  padding: 10px;
+  padding-left: 50px;
+  padding-right: 50px;
+  margin-top: 10px;
+  justify-content: center;
+  align-items: center;
+  background-color: #d8d8d8;
+  border-radius: 50px;
+  filter: drop-shadow(3px 3px 1px rgba(40,40,40, 1));
+`;

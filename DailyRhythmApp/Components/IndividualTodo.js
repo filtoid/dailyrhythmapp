@@ -7,16 +7,29 @@ import ComponentContainer from "./StyledComponents/ComponentContainer";
 
 export default function IndividualTodo(navigation){
 
-    const { index, item } = navigation.route.params;
+    const { index, item, deleteItem } = navigation.route.params;
     // console.log(item);
+    const getFormattedTime = () => {
+        let mins = Math.floor(item.time/60);
+        let secs = item.time % 60;
+        if(item.time < 60){
+            return secs + "s";
+        }else{
+            return mins + "m " + secs + "s";
+        }
+    }
+
     return (
         <ComponentContainer>
             <ListContainer>
                 <TextItem>{item.name}</TextItem>
                 <TextItem>{item.description}</TextItem>
-                <TextItem>{item.time}</TextItem>
-                <IconContainer onPress={() => deleteItem(item.key)}>
--                   <MaterialIcons name="delete" size={24} color="black" />
+                <TextItem>{getFormattedTime()}</TextItem>
+                <IconContainer onPress={() => {
+                    deleteItem(item.key);
+                    navigation.navigation.goBack();
+                }}>
+                    <MaterialIcons name="delete" size={24} color="black" />
                 </IconContainer>
             </ListContainer>
         </ComponentContainer>

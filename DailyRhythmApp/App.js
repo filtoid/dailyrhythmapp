@@ -1,6 +1,6 @@
 import React from "react";
 import TodoController from "./Components/TodoController";
-
+import NewTodo from "./Components/NewTodo";
 // import { NativeRouter, Route, Link } from "react-router-native";
 
 import IndividualTodo from "./Components/IndividualTodo";
@@ -18,6 +18,7 @@ export default function App() {
           {/* <TodoController data={data} saveList={saveList} deleteItem={deleteItem} submitHandler={submitHandler}/> */}
           {/* </Stack.Screen> */}
           <Stack.Screen name="Todo" component={IndividualTodo} />
+          <Stack.Screen name="New Todo" component={NewTodo} />
         </Stack.Navigator>
       </NavigationContainer>
 

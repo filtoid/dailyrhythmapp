@@ -61,6 +61,7 @@ export default function TodoList({ item, index, deleteItem, saveAll, navigation 
         setIsRunning(!isRunning);
         saveAll(item.key, seconds);
     }
+
     return (
         <ComponentContainer>
         <ListContainer style={backgroundColor()}>
@@ -69,7 +70,7 @@ export default function TodoList({ item, index, deleteItem, saveAll, navigation 
             <TextItem>{getFormattedTime()}</TextItem>
             </View>
             <IconContainer onPress={() => {
-                navigation.navigation.navigate('Todo', { index: index, item:item })
+                navigation.navigation.navigate('Todo', { index: index, item:item, deleteItem: deleteItem })
             }}>
             <Ionicons name="ios-open-sharp" size={24} color="black" />
             </IconContainer>
@@ -86,7 +87,7 @@ const ListContainer = styled.View`
   background-color: whitesmoke;
   height: auto;
   width: 350px;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
   border-radius: 10px;
   flex-direction: row;
   justify-content: space-between;
@@ -98,6 +99,7 @@ const ComponentContainer = styled.View`
   justify-content: center;
   height: auto;
   width: auto;
+  margin-top: 10px;
 `;
 
 const TextItem = styled.Text`
