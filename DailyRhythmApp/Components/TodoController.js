@@ -86,7 +86,7 @@ export default function TodoController(navigation) {
         <View>
           <NewAddButton onPress={() => {
                 navigation.navigation.navigate('New Todo', {submitHandler: submitHandler})
-            }}>New</NewAddButton>
+            }}><TextItem>New</TextItem></NewAddButton>
         </View>
       </View>
     </ComponentContainer>
@@ -105,4 +105,16 @@ const NewAddButton = styled.TouchableOpacity`
   background-color: #d8d8d8;
   border-radius: 50px;
   filter: drop-shadow(3px 3px 1px rgba(40,40,40, 1));
+`;
+
+const TextItem = styled.Text`
+    color: black;
+    width: 350px;
+    height: auto;
+    text-align:center;
+    font-size: 20px;
+    margin-top: 10px;
+    margin-right: 20px;
+    margin-left:20px;
+    font-family: arial;
 `;
