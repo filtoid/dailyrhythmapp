@@ -3,15 +3,29 @@ import {View, TextInput, Text, TouchableOpacity, Button} from 'react-native'
 import styled from "styled-components/native";
 
 export default function AddInput({ submitHandler, returnCall }) {
-    const [taskName, setTaskName] = useState("");
-    const [taskDescription, setTaskDescription] = useState("");
+  const [taskName, setTaskName] = useState("");
+  const [taskDescription, setTaskDescription] = useState("");
+  const [taskTime, setTaskTime] = useState(30);
 
-    const onChangeTaskName = (text) => {
-        setTaskName(text);
-    };
-    const onChangeTaskDescription = (text) => {
-        setTaskDescription(text);
-    };
+  const onChangeTaskName = (text) => {
+      setTaskName(text);
+  };
+  const onChangeTaskDescription = (text) => {
+      setTaskDescription(text);
+  };
+
+  const updatedTime = (val) => {
+    if(val.replace(/\s/g, "") == ""){
+      setTaskTime(0);
+      return;
+    }
+    let num = parseInt(val);
+    if(isNaN(num)){
+      setTaskTime(30);
+    }else{
+      setTaskTime(num);
+    }
+  }
 
   return (
     <TodoContainer>
@@ -21,9 +35,12 @@ export default function AddInput({ submitHandler, returnCall }) {
       <InputContainer>
         <Input placeholder="Description..." onChangeText={onChangeTaskDescription} value={taskDescription}/>
       </InputContainer>
+      <InputContainer>
+        <Input placeholder="Time" keyboardType="number-pad" onChangeText={updatedTime} value={taskTime}/>
+      </InputContainer>
       <TodoAddButton
         onPress={() => {
-            submitHandler(taskName, taskDescription);
+            submitHandler(taskName, taskDescription, taskTime);
             setTaskName("");
             setTaskDescription("");
             returnCall();

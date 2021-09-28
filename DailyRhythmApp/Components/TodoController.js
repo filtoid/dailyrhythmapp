@@ -55,7 +55,7 @@ export default function TodoController(navigation) {
     SaveStoredData(data);
   }
 
-  const submitHandler = (value, description) => {
+  const submitHandler = (value, description, time) => {
     setData((prevTodo) => {
       let ret = [
         {
@@ -63,6 +63,7 @@ export default function TodoController(navigation) {
           description: description,
           key: Math.random().toString(),
           time: 0,
+          destTime: time,
           curDate: GetCurrentDateId()
         },
         ...prevTodo,

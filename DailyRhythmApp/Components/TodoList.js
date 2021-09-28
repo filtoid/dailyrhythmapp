@@ -9,6 +9,7 @@ const SAVE_TIMEOUT = 10;
 
 export default function TodoList({ item, index, deleteItem, saveAll, navigation }) {
     const [seconds, setSeconds] = useState(item.time);
+    const [runtime, setRuntime] = useState(item.destTime);
     const [isRunning, setIsRunning] = useState(false);
     const [lastSaved, setLastSaved] = useState(0);
 
@@ -35,11 +36,25 @@ export default function TodoList({ item, index, deleteItem, saveAll, navigation 
     const getFormattedTime = () => {
         let mins = Math.floor(seconds/60);
         let secs = seconds % 60;
+        let curTime = "";
         if(seconds < 60){
-            return secs + "s";
+            curTime += secs + "s";
         }else{
-            return mins + "m " + secs + "s";
+            curTime += mins + "m " + secs + "s";
         }
+
+        if(isNaN(runtime) || runtime < 1){
+            return curTime;
+        }
+
+        let destMins = Math.floor(runtime/60);
+        let destSecs = runtime % 60;
+        if(runtime < 60){
+            curTime += " / " + destSecs + "s";
+        }else{
+            curTime += " / " + destMins + "m " + destSecs + "s";
+        }
+        return curTime;
     }
 
     const getPlayButton = () => {
