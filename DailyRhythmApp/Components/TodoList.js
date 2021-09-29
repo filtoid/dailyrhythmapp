@@ -1,33 +1,112 @@
-import React from "react";
+import React, { useState } from "react";
 import { View } from "react-native";
-import { Entypo } from "@expo/vector-icons";
-import { MaterialIcons } from "@expo/vector-icons";
+import { AntDesign, Entypo, Ionicons } from "@expo/vector-icons";
+import { GetCurrentDateId } from "../StorageService";
+
 import styled from "styled-components/native";
 
-export default function TodoList({ item, deleteItem }) {
-  return (
-    <ComponentContainer>
-      <ListContainer>
-        <View>
-          <TextItem>{item.name}</TextItem>
-        </View>
-        <IconContainer onPress={() => deleteItem(item.key)}>
-          <MaterialIcons name="delete" size={24} color="black" />
-        </IconContainer>
-      </ListContainer>
-    </ComponentContainer>
-  );
+const SAVE_TIMEOUT = 10;
+
+export default function TodoList({ item, index, deleteItem, saveAll, navigation }) {
+    const [seconds, setSeconds] = useState(item.time);
+    const [runtime, setRuntime] = useState(item.destTime);
+    const [isRunning, setIsRunning] = useState(false);
+    const [lastSaved, setLastSaved] = useState(0);
+
+    let d = GetCurrentDateId();
+    const [curDate, ] = useState(d);
+
+    const tick = () => {
+        if(isRunning){
+            setSeconds(seconds + 1);
+            if(lastSaved > SAVE_TIMEOUT){
+                saveAll(item.key, seconds);
+                setLastSaved(0);
+            }else{
+                setLastSaved(lastSaved + 1);
+            }
+        }
+    }
+
+    React.useEffect(() => {
+        const timerId = setInterval(() => tick(), 1000);
+        return () => clearInterval(timerId);
+    });
+
+    const getFormattedTime = () => {
+        let mins = Math.floor(seconds/60);
+        let secs = seconds % 60;
+        let curTime = "";
+        if(seconds < 60){
+            curTime += secs + "s";
+        }else{
+            curTime += mins + "m " + secs + "s";
+        }
+
+        if(isNaN(runtime) || runtime < 1){
+            return curTime;
+        }
+
+        let destMins = Math.floor(runtime/60);
+        let destSecs = runtime % 60;
+        if(runtime < 60){
+            curTime += " / " + destSecs + "s";
+        }else{
+            curTime += " / " + destMins + "m " + destSecs + "s";
+        }
+        return curTime;
+    }
+
+    const getPlayButton = () => {
+        if(!isRunning){
+            return <AntDesign name="caretright" size={24} color="black" />;
+        }else{
+            return <Entypo name="controller-stop" size={24} color="black" />
+        }
+    }
+    const backgroundColor = () => {
+        if(!isRunning){
+            return {backgroundColor: 'whitesmoke'}
+        }else{
+            return {backgroundColor: 'green'}
+        }
+    }
+
+    const toggleRunning = () => {
+        setIsRunning(!isRunning);
+        saveAll(item.key, seconds);
+    }
+
+    return (
+        <ComponentContainer>
+        <ListContainer style={backgroundColor()}>
+            <View>
+            <TextItem>{item.name}</TextItem>
+            <TextItem>{getFormattedTime()}</TextItem>
+            </View>
+            <IconContainer onPress={() => {
+                navigation.navigation.navigate('Todo', { index: index, item:item, deleteItem: deleteItem })
+            }}>
+            <Ionicons name="ios-open-sharp" size={24} color="black" />
+            </IconContainer>
+            <IconContainer onPress={() => toggleRunning()}>
+            {getPlayButton()}
+            </IconContainer>
+        </ListContainer>
+        </ComponentContainer>
+    );
 }
 
 
-const ListContainer = styled.TouchableOpacity`
+const ListContainer = styled.View`
   background-color: whitesmoke;
   height: auto;
   width: 350px;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
   border-radius: 10px;
   flex-direction: row;
   justify-content: space-between;
+  padding: 20px;
 `;
 
 const ComponentContainer = styled.View`
@@ -35,11 +114,12 @@ const ComponentContainer = styled.View`
   justify-content: center;
   height: auto;
   width: auto;
+  margin-top: 10px;
 `;
 
 const TextItem = styled.Text`
   color: black;
-  width: 260px;
+  width: 200px;
   height: auto;
   font-size: 20px;
   margin-top: 10px;
@@ -60,7 +140,7 @@ const TextDate = styled.Text`
 const IconContainer = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
-  margin-right: 10px;
+  margin-right: 5px;
   margin-top: 0px;
   height: 40px;
   border-radius: 10px;
